@@ -1,0 +1,20 @@
+{
+  "name": "The Last Stand",
+  "short_name": "TLS",
+  "description": "Juego de accion maritima.",
+  "start_url": "./The Last Stand.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f5739",
+  "theme_color": "#0f5739",
+  "icons": [
+    {
+      "src": "logoTLS.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+
+  ]
+}
