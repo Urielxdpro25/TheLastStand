@@ -1,11 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="logoTLS.png">
     <title>Juego | TLS</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-image: url(fondoNavbar.jpeg);
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .canvas {
+            display: block;
+            width: min(90vw, 800px);
+            height: auto;
+            border: 2px solid black;
+            background: #f4f4f4;
+        }
+
+        .navbar-brand {
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+        }
+
+        .navbar-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 12px 20px;
+            }
+
+            .navbar-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 8px;
+            }
+        }
+
+
+        .footer {
+            background-image: url(fondoNavbar.jpeg);
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+            margin-top: auto;
+        }
+
+        .pf {
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <nav class="navbar" role="navigation" aria-label="Menú principal">
+        <a class="navbar-brand" href="index.html">The Last Stand</a>
+        <div class="navbar-links">
+            <a href="index.html">Inicio</a>
+            <a href="contacto.html">Contacto</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <canvas class="canvas" id="canvas" width="auto" height="auto"></canvas>
+    </div>
+
+    <footer class="footer">
+        <p class="pf">© 2026 The Last Stand. Todos los derechos reservados. La Doble U.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+</script>
+
 </body>
+
 </html>
