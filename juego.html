@@ -9,9 +9,15 @@
     <title>Juego | TLS</title>
     <style>
         body {
+            background-image: url("MapaPirata.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+
         }
 
         .navbar {
@@ -41,7 +47,7 @@
             width: min(90vw, 800px);
             height: auto;
             border: 2px solid black;
-            background: #f4f4f4;
+            background: blue;
         }
 
         .navbar-brand {
@@ -82,6 +88,12 @@
             }
         }
 
+        .contenedor-barco {
+            background-color: bisque;
+            width: auto;
+            height: 100px;
+        }
+
 
         .footer {
             background-image: url(fondoNavbar.jpeg);
@@ -115,10 +127,22 @@
             <a href="contacto.html">Contacto</a>
         </div>
     </nav>
+    <br>
+
+    <div class="contenedor-barco">
+    </div>
+
+    <br>
+
 
     <div class="main-content">
         <canvas class="canvas" id="canvas" width="auto" height="auto"></canvas>
     </div>
+
+
+
+
+
 
     <footer class="footer">
         <p class="pf">© 2026 The Last Stand. Todos los derechos reservados. La Doble U.</p>
@@ -126,10 +150,161 @@
 
     <script>
         const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-</script>
+        const life = 100;
+        const balas = 100;
+        const hombres = 20;
+
+        function resizeCanvas() {
+            const maxWidth = Math.min(window.innerWidth * 0.9, 800);
+            const maxHeight = Math.min(window.innerHeight * 0.7, 600);
+            canvas.width = maxWidth;
+            canvas.height = maxHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        const shipImage = new Image();
+        shipImage.src = "barco.png";
+
+        const ship = {
+            x: canvas.width / 2 - 40,
+            y: canvas.height - 120,
+            width: 80,
+            height: 80,
+            speed: 5,
+        };
+
+        const shootDirection = { x: 0, y: -1 };
+        const bullets = [];
+        const shootCooldown = 5000; // milisegundos entre disparos
+        let nextShootTime = 0;
+        const moveKeys = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowLeft: false,
+            ArrowRight: false,
+        };
+
+        window.addEventListener("keydown", (event) => {
+            const key = event.key;
+
+            if (key in moveKeys) {
+                moveKeys[key] = true;
+            }
+
+            switch (key.toLowerCase()) {
+                case "w":
+                    shootDirection.x = 0;
+                    shootDirection.y = -1;
+                    break;
+                case "a":
+                    shootDirection.x = -1;
+                    shootDirection.y = 0;
+                    break;
+                case "s":
+                    shootDirection.x = 0;
+                    shootDirection.y = 1;
+                    break;
+                case "d":
+                    shootDirection.x = 1;
+                    shootDirection.y = 0;
+                    break;
+                case "t":
+                    if (Date.now() >= nextShootTime) {
+                        bullets.push({
+                            x: ship.x + ship.width / 2 - 5,
+                            y: ship.y + ship.height / 2 - 5,
+                            vx: shootDirection.x * 8,
+                            vy: shootDirection.y * 8,
+                            size: 10,
+                        });
+                        nextShootTime = Date.now() + shootCooldown;
+                    }
+                    break;
+            }
+        });
+
+        window.addEventListener("keyup", (event) => {
+            if (event.key in moveKeys) {
+                moveKeys[event.key] = false;
+            }
+        });
+
+        function update() {
+            if (moveKeys.ArrowUp) ship.y -= ship.speed;
+            if (moveKeys.ArrowDown) ship.y += ship.speed;
+            if (moveKeys.ArrowLeft) ship.x -= ship.speed;
+            if (moveKeys.ArrowRight) ship.x += ship.speed;
+
+            ship.x = Math.max(0, Math.min(canvas.width - ship.width, ship.x));
+            ship.y = Math.max(0, Math.min(canvas.height - ship.height, ship.y));
+
+            for (const bullet of bullets) {
+                bullet.x += bullet.vx;
+                bullet.y += bullet.vy;
+            }
+
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                if (
+                    bullet.x < -bullet.size ||
+                    bullet.x > canvas.width + bullet.size ||
+                    bullet.y < -bullet.size ||
+                    bullet.y > canvas.height + bullet.size
+                ) {
+                    bullets.splice(i, 1);
+                }
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (shipImage.complete) {
+                ctx.drawImage(shipImage, ship.x, ship.y, ship.width, ship.height);
+            } else {
+                ctx.fillStyle = "white";
+                ctx.fillRect(ship.x, ship.y, ship.width, ship.height);
+            }
+
+            ctx.fillStyle = "red";
+            for (const bullet of bullets) {
+                ctx.beginPath();
+                ctx.arc(bullet.x + bullet.size / 2, bullet.y + bullet.size / 2, bullet.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = "white";
+            ctx.font = "16px Arial";
+            ctx.fillText("Flechas: mover nave", 10, 22);
+            ctx.fillText("W/A/S/D: dirección de disparo", 10, 44);
+            ctx.fillText("T: disparar", 10, 66);
+
+            const cooldownRemaining = Math.max(0, nextShootTime - Date.now());
+            if (cooldownRemaining > 0) {
+                const seconds = (cooldownRemaining / 1000).toFixed(1);
+                ctx.fillStyle = "red";
+                ctx.font = "18px Arial";
+                ctx.fillText(`Recargando... ${seconds}s`, 10, 96);
+            } else {
+                ctx.fillStyle = "lime";
+                ctx.font = "18px Arial";
+                ctx.fillText("Recarga lista - puedes disparar", 10, 96);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        requestAnimationFrame(gameLoop);
+    </script>
 
 </body>
 
