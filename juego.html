@@ -88,14 +88,19 @@
             }
         }
 
-        .contenedor-barco {
-            background-color: bisque;
-            width: auto;
+
+
+        .contenedor-barco{
+            width: min(90vw, 800px);
             height: 100px;
+            background-color: bisque;
+            z-index: 2;
+            border: 2px solid #000;
+            box-sizing: border-box;
         }
 
 
-        .footer {
+        .footer {  
             background-image: url(fondoNavbar.jpeg);
             background-size: cover;
             background-position: center;
@@ -127,22 +132,14 @@
             <a href="contacto.html">Contacto</a>
         </div>
     </nav>
-    <br>
 
     <div class="contenedor-barco">
+
     </div>
-
-    <br>
-
 
     <div class="main-content">
         <canvas class="canvas" id="canvas" width="auto" height="auto"></canvas>
     </div>
-
-
-
-
-
 
     <footer class="footer">
         <p class="pf">© 2026 The Last Stand. Todos los derechos reservados. La Doble U.</p>

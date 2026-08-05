@@ -3,7 +3,7 @@
 // Versión del caché
 // ==========================================
 
-const CACHE = "gestionador-v2";
+const CACHE = "gestionador-v5";
 
 // Archivos que se guardarán para usar sin Internet
 const ARCHIVOS = [
@@ -14,7 +14,6 @@ const ARCHIVOS = [
     "./contacto.html",
     "./juego.html",
     "./fondoNavbar.jpeg",
-
 ];
 
 // ==========================================
@@ -31,11 +30,11 @@ self.addEventListener("install", event => {
 
         caches.open(CACHE)
 
-        .then(cache => {
+            .then(cache => {
 
-            return cache.addAll(ARCHIVOS);
+                return cache.addAll(ARCHIVOS);
 
-        })
+            })
 
     );
 
@@ -87,15 +86,15 @@ self.addEventListener("fetch", event => {
 
         caches.match(event.request)
 
-        .then(response => {
+            .then(response => {
 
-            if (response) {
-                return response;
-            }
+                if (response) {
+                    return response;
+                }
 
-            return fetch(event.request);
+                return fetch(event.request);
 
-        })
+            })
 
     );
 
